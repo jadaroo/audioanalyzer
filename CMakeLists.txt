@@ -12,16 +12,20 @@ pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
     main.c
+    src/initialization.c
+    src/dft.c
 )
 
-# target_include_directories(${PROJECT_NAME} PRIVATE
-#     ${CMAKE_CURRENT_LIST_DIR}/include
-# )
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/include
+)
 
 target_link_libraries(${PROJECT_NAME}
     pico_stdlib
     hardware_adc
     hardware_dma
+    hardware_irq
+    m
 )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)
