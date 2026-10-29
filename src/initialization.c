@@ -3,6 +3,17 @@
 #include <stdint.h>
 #include <hardware/dma.h>
 #include <hardware/adc.h>
+#include "hardware/i2c.h"
+
+void init_i2c_default(){
+  i2c_init(i2c_default, 1000 * 1000);
+  
+  gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
+  gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
+  
+  gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
+  gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
+}
 
 void init_dma_with_chaining(uint *ch1, uint *ch2, uint16_t *first_array, uint16_t *second_array, uint16_t buffer_size){
   dma_channel_claim(*ch1);
@@ -45,11 +56,9 @@ void init_dma_with_chaining(uint *ch1, uint *ch2, uint16_t *first_array, uint16_
   );
 }
 
-void init_adc_with_fifo(uint8_t input, uint16_t clkdiv){
+void init_adc_0_with_fifo(uint16_t clkdiv){
   adc_init();
-  adc_set_temp_sensor_enabled(true);
-  adc_select_input(input);
-
+  adc_gpio_init(26);
   adc_fifo_setup(
     true,
     true,
